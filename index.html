@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Year 3 Scratch 3 Exam: The Maze Runner: Ball Dash</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-bg: #ffffff;
+      --events: #FFBF00;
+      --events-border: #CC9900;
+      --motion: #4C97FF;
+      --motion-border: #3373CC;
+      --control: #FFAB19;
+      --control-border: #CF8B17;
+      --sensing: #5CB1D6;
+      --sensing-border: #2E8EB8;
+      --operators: #59C059;
+      --operators-border: #389438;
+      --variables: #FF8C1A;
+      --variables-border: #DB6E00;
+      --sound: #CF63CF;
+      --sound-border: #BD42BD;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f0f4ff;
+      background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      margin: 0;
+      padding: 20px;
+      color: #1e293b;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header Banner */
+    .header {
+      background: linear-gradient(135deg, #ff6b6b, #ff9f43, #feca57);
+      color: white;
+      padding: 28px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+      margin-bottom: 24px;
+      border: 4px solid #fff;
+    }
+
+    .header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2.3rem;
+      margin: 0 0 8px 0;
+      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+    }
+
+    .header p {
+      font-size: 1.15rem;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    /* Student Info & Progress Bar */
+    .top-bar {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+      justify-content: space-between;
+      border: 3px solid #e2e8f0;
+    }
+
+    .student-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .student-input input {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .student-input input:focus {
+      border-color: #4C97FF;
+    }
+
+    .progress-wrapper {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #334155;
+    }
+
+    .progress-track {
+      height: 22px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 3px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* Task Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-top: 8px solid #4C97FF;
+    }
+
+    .card.card-1 { border-top-color: #4C97FF; }
+    .card.card-2 { border-top-color: #CF63CF; }
+    .card.card-3 { border-top-color: #FF8C1A; }
+    .card.card-4 { border-top-color: #10b981; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      background: #4C97FF;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+    }
+
+    .card-2 .badge { background: #CF63CF; }
+    .card-3 .badge { background: #FF8C1A; }
+    .card-4 .badge { background: #10b981; }
+
+    .card h2 {
+      font-family: 'Fredoka', sans-serif;
+      margin: 0;
+      font-size: 1.5rem;
+      color: #1e293b;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Scratch Block Styling */
+    .scratch-workspace {
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .sb {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .sb-hat {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding-top: 10px;
+    }
+
+    .sb-events { background: var(--events); border: 1.5px solid var(--events-border); text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
+    .sb-motion { background: var(--motion); border: 1.5px solid var(--motion-border); }
+    .sb-control { background: var(--control); border: 1.5px solid var(--control-border); text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
+    .sb-sensing { background: var(--sensing); border: 1.5px solid var(--sensing-border); clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%); padding: 6px 16px; }
+    .sb-operators { background: var(--operators); border: 1.5px solid var(--operators-border); border-radius: 999px; padding: 4px 12px; }
+    .sb-operators-hex { background: var(--operators); border: 1.5px solid var(--operators-border); clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%); padding: 6px 16px; }
+    .sb-variables { background: var(--variables); border: 1.5px solid var(--variables-border); }
+    .sb-var-pill { background: var(--variables); border: 1.5px solid #fff; border-radius: 999px; padding: 2px 10px; }
+    .sb-sound { background: var(--sound); border: 1.5px solid var(--sound-border); }
+
+    .oval {
+      background: white;
+      color: #1e293b;
+      padding: 1px 9px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .dropdown {
+      background: rgba(0,0,0,0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .color-swatch {
+      display: inline-block;
+      width: 22px;
+      height: 16px;
+      background: #000000;
+      border: 2px solid white;
+      border-radius: 8px;
+    }
+
+    .c-mouth {
+      border-left: 14px solid var(--control);
+      padding-left: 10px;
+      margin-left: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .c-end {
+      height: 12px;
+      width: 90px;
+      background: var(--control);
+      border-radius: 0 0 8px 8px;
+      border-bottom: 1.5px solid var(--control-border);
+    }
+
+    /* Interactive Checklist */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .check-item:hover {
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .check-item.checked {
+      background: #ecfdf5;
+      border-color: #10b981;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      accent-color: #10b981;
+      cursor: pointer;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .check-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .check-item.checked .check-text {
+      color: #065f46;
+    }
+
+    /* Celebration Banner */
+    #celebration {
+      display: none;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      text-align: center;
+      padding: 28px;
+      border-radius: 24px;
+      margin-top: 20px;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+      animation: popIn 0.4s ease;
+    }
+
+    #celebration h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      margin: 0 0 8px 0;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .reset-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .reset-btn:hover { background: #dc2626; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>🎮 The Maze Runner: Ball Dash</h1>
+    <p>Year 3 Hands-On Coding Examination • Scratch 3</p>
+  </div>
+
+  <!-- Student Name & Progress -->
+  <div class="top-bar">
+    <div class="student-input">
+      <label for="studentName">🧑‍🎓 Student Name:</label>
+      <input type="text" id="studentName" placeholder="Type your name..." />
+    </div>
+    <div class="progress-wrapper">
+      <div class="progress-label">
+        <span>Your Exam Progress</span>
+        <span id="progressText">0 / 11 Completed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 1: PLAYER MOVEMENT (SPRITE 1) -->
+  <div class="card card-1">
+    <div class="card-header">
+      <span class="badge">Part 1</span>
+      <h2>🏃 Player Movement & Wall Collision (Sprite1)</h2>
+    </div>
+    <div class="grid-2">
+      <!-- Visual Scratch Blocks -->
+      <div class="scratch-workspace">
+        <div class="sb sb-events sb-hat">when 🏴 clicked</div>
+        <div class="sb sb-motion">go to x: <span class="oval">-200</span> y: <span class="oval">140</span></div>
+        <div class="sb sb-control">forever</div>
+        <div class="c-mouth">
+          <!-- Right Arrow -->
+          <div class="sb sb-control">if <span class="sb-sensing">key <span class="dropdown">right arrow ▾</span> pressed?</span> then</div>
+          <div class="c-mouth">
+            <div class="sb sb-motion">change x by <span class="oval">5</span></div>
+            <div class="sb sb-control">if <span class="sb-sensing">touching color <span class="color-swatch"></span> ?</span> then</div>
+            <div class="c-mouth">
+              <div class="sb sb-motion">change x by <span class="oval">-5</span></div>
+            </div>
+            <div class="c-end"></div>
+          </div>
+          <div class="c-end"></div>
+
+          <!-- Left Arrow -->
+          <div class="sb sb-control">if <span class="sb-sensing">key <span class="dropdown">left arrow ▾</span> pressed?</span> then</div>
+          <div class="c-mouth">
+            <div class="sb sb-motion">change x by <span class="oval">-5</span></div>
+            <div class="sb sb-control">if <span class="sb-sensing">touching color <span class="color-swatch"></span> ?</span> then</div>
+            <div class="c-mouth">
+              <div class="sb sb-motion">change x by <span class="oval">5</span></div>
+            </div>
+            <div class="c-end"></div>
+          </div>
+          <div class="c-end"></div>
+
+          <!-- Up Arrow -->
+          <div class="sb sb-control">if <span class="sb-sensing">key <span class="dropdown">up arrow ▾</span> pressed?</span> then</div>
+          <div class="c-mouth">
+            <div class="sb sb-motion">change y by <span class="oval">5</span></div>
+            <div class="sb sb-control">if <span class="sb-sensing">touching color <span class="color-swatch"></span> ?</span> then</div>
+            <div class="c-mouth">
+              <div class="sb sb-motion">change y by <span class="oval">-5</span></div>
+            </div>
+            <div class="c-end"></div>
+          </div>
+          <div class="c-end"></div>
+
+          <!-- Down Arrow -->
+          <div class="sb sb-control">if <span class="sb-sensing">key <span class="dropdown">down arrow ▾</span> pressed?</span> then</div>
+          <div class="c-mouth">
+            <div class="sb sb-motion">change y by <span class="oval">-5</span></div>
+            <div class="sb sb-control">if <span class="sb-sensing">touching color <span class="color-swatch"></span> ?</span> then</div>
+            <div class="c-mouth">
+              <div class="sb sb-motion">change y by <span class="oval">5</span></div>
+            </div>
+            <div class="c-end"></div>
+          </div>
+          <div class="c-end"></div>
+        </div>
+        <div class="c-end"></div>
+      </div>
+
+      <!-- Checkboxes -->
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">1. Added <b>when green flag clicked</b> and set starting position to <b>x: -200, y: 140</b>.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">2. Added <b>Right</b> & <b>Left</b> arrow blocks (change x by <b>5</b> and <b>-5</b>) inside a <b>forever</b> loop.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">3. Added <b>Up</b> & <b>Down</b> arrow blocks (change y by <b>5</b> and <b>-5</b>).</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">4. Used the eyedropper tool to pick the <b>black wall color</b> so the ball cannot pass through walls!</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2: SCORE & COLLECTIBLE -->
+  <div class="card card-2">
+    <div class="card-header">
+      <span class="badge">Part 2</span>
+      <h2>⭐ Collectible Item & Score System</h2>
+    </div>
+    <div class="grid-2">
+      <!-- Visual Scratch Blocks -->
+      <div class="scratch-workspace">
+        <div class="sb sb-events sb-hat">when 🏴 clicked</div>
+        <div class="sb sb-variables">set <span class="dropdown">score ▾</span> to <span class="oval">0</span></div>
+        <div class="sb sb-motion">go to x: <span class="oval">180</span> y: <span class="oval">-130</span></div>
+        <div class="sb sb-control">forever</div>
+        <div class="c-mouth">
+          <div class="sb sb-control">if <span class="sb-sensing">touching <span class="dropdown">Sprite1 ▾</span> ?</span> then</div>
+          <div class="c-mouth">
+            <div class="sb sb-sound">start sound <span class="dropdown">Pop ▾</span></div>
+            <div class="sb sb-variables">change <span class="dropdown">score ▾</span> by <span class="oval">1</span></div>
+            <div class="sb sb-motion">go to x: <span class="sb-operators">pick random <span class="oval">-180</span> to <span class="oval">180</span></span> y: <span class="sb-operators">pick random <span class="oval">-130</span> to <span class="oval">130</span></span></div>
+          </div>
+          <div class="c-end"></div>
+        </div>
+        <div class="c-end"></div>
+      </div>
+
+      <!-- Checkboxes -->
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">5. Created a variable named <b>score</b>, set it to <b>0</b>, and placed the item at <b>x: 180, y: -130</b>.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">6. Added <b>if touching Sprite1</b> to play the <b>Pop</b> sound and change <b>score by 1</b>.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">7. Added <b>pick random</b> blocks (x: -180 to 180, y: -130 to 130) so the item jumps to a new spot.</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3: COUNTDOWN TIMER -->
+  <div class="card card-3">
+    <div class="card-header">
+      <span class="badge">Part 3</span>
+      <h2>⏱️ Game Timer & Stop All</h2>
+    </div>
+    <div class="grid-2">
+      <!-- Visual Scratch Blocks -->
+      <div class="scratch-workspace">
+        <div class="sb sb-events sb-hat">when 🏴 clicked</div>
+        <div class="sb sb-variables">set <span class="dropdown">Timer ▾</span> to <span class="oval">0</span></div>
+        <div class="sb sb-control">repeat until <span class="sb-operators-hex"><span class="sb-var-pill">Timer</span> = <span class="oval">-30</span></span></div>
+        <div class="c-mouth">
+          <div class="sb sb-control">wait <span class="oval">1</span> seconds</div>
+          <div class="sb sb-variables">change <span class="dropdown">Timer ▾</span> by <span class="oval">-1</span></div>
+        </div>
+        <div class="c-end"></div>
+        <div class="sb sb-control">stop <span class="dropdown">all ▾</span></div>
+      </div>
+
+      <!-- Checkboxes -->
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">8. Created a variable named <b>Timer</b> and set it to <b>0</b> when the green flag is clicked.</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="task-check">
+          <span class="check-text">9. Added <b>repeat until Timer = -30</b> with <b>wait 1 seconds</b> and <b>change Timer by -1</b>, followed by <b>stop all</b>.</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 4: RUN & TEST YOUR CODE -->
+  <div class="card card-4">
+    <div class="card-header">
+      <span class="badge">Final Check</span>
+      <h2>🚀 Run & Test Your Game!</h2>
+    </div>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="task-check">
+        <span class="check-text">10. Clicked the <b>Green Flag 🏴</b> and tested all 4 arrow keys—the ball moves smoothly and stops at black walls!</span>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="task-check">
+        <span class="check-text">11. Tested collecting the target (score goes up + sound plays) and confirmed the game stops when Timer reaches -30!</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Celebration Banner -->
+  <div id="celebration">
+    <h2>🎉 Awesome Job, <span id="displayStudent">Coder</span>! 🎉</h2>
+    <p style="font-size: 1.2rem; font-weight: 700;">You finished all 11 steps of The Maze Runner: Ball Dash! Raise your hand to show your teacher! ✋⭐</p>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <button class="reset-btn" onclick="resetProgress()">🔄 Reset Checklist</button>
+  </div>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.task-check');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  const celebration = document.getElementById('celebration');
+  const studentInput = document.getElementById('studentName');
+  const displayStudent = document.getElementById('displayStudent');
+
+  // Load saved progress from browser
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('mazeRunner_name');
+    if (savedName) {
+      studentInput.value = savedName;
+      displayStudent.textContent = savedName;
+    }
+
+    checkboxes.forEach((cb, index) => {
+      const isChecked = localStorage.getItem('mazeRunner_task_' + index) === 'true';
+      cb.checked = isChecked;
+      if (isChecked) cb.closest('.check-item').classList.add('checked');
+    });
+    updateProgress();
+  });
+
+  studentInput.addEventListener('input', () => {
+    localStorage.setItem('mazeRunner_name', studentInput.value);
+    displayStudent.textContent = studentInput.value.trim() || 'Coder';
+  });
+
+  checkboxes.forEach((cb, index) => {
+    cb.addEventListener('change', () => {
+      localStorage.setItem('mazeRunner_task_' + index, cb.checked);
+      if (cb.checked) {
+        cb.closest('.check-item').classList.add('checked');
+      } else {
+        cb.closest('.check-item').classList.remove('checked');
+      }
+      updateProgress();
+    });
+  });
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const completed = document.querySelectorAll('.task-check:checked').length;
+    const percentage = Math.round((completed / total) * 100);
+
+    progressFill.style.width = percentage + '%';
+    progressText.textContent = `${completed} / ${total} Completed`;
+
+    if (completed === total) {
+      celebration.style.display = 'block';
+    } else {
+      celebration.style.display = 'none';
+    }
+  }
+
+  function resetProgress() {
+    if (confirm('Clear all checkmarks and start over?')) {
+      checkboxes.forEach((cb, index) => {
+        cb.checked = false;
+        cb.closest('.check-item').classList.remove('checked');
+        localStorage.removeItem('mazeRunner_task_' + index);
+      });
+      updateProgress();
+    }
+  }
+</script>
+
+</body>
+</html>
